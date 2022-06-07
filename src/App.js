@@ -225,7 +225,7 @@ function App() {
       time_show: 1,
       url: "video1.mp4",
       // duration:5,
-      banners: [2, 3],
+      banners: [2, 3, 7],
       pre_position: null
     },
     {
@@ -233,7 +233,7 @@ function App() {
       type: TYPE_NEXT_VIDEO,
       url: "climbhill.mp4",
       text: "Climb Hill",
-      banners: [6, 7],
+      banners: [6],
       time_show: 3,
       style: {
         display: "flex",
@@ -241,7 +241,7 @@ function App() {
         alignItems: "center",
         position: 'absolute',
         left: "15%",
-        top: "40%",
+        top: "50%",
         background: "white",
         width: "30%",
         height: "25%",
@@ -263,7 +263,7 @@ function App() {
         alignItems: "center",
         position: 'absolute',
         right: "15%",
-        top: "40%",
+        top: "50%",
         background: "white",
         width: "30%",
         height: "25%",
@@ -330,7 +330,7 @@ function App() {
         justifyContent: "center",
         alignItems: "center",
         position: 'absolute',
-        left: "15%",
+        left: "35%",
         top: "40%",
         background: "white",
         width: "30%",
@@ -353,7 +353,7 @@ function App() {
         {name: 'slide 3', time: 129},
         {name: 'slide 4', time: 257},
       ],
-      text: "Look Sky",
+      text: "View Presentation",
       banners: [8, 9],
       time_show: 1,
       style: {
@@ -361,8 +361,8 @@ function App() {
         justifyContent: "center",
         alignItems: "center",
         position: 'absolute',
-        right: "15%",
-        top: "40%",
+        left: "35%",
+        top: "20%",
         background: "white",
         width: "30%",
         height: "25%",
@@ -372,7 +372,7 @@ function App() {
         cursor: "pointer"
       },
       url: "aws.mp4",
-      pre_position: 2,
+      pre_position: 1,
     },
     {
       id: 8,
@@ -561,12 +561,14 @@ function App() {
           playsinline
           playing={playing}
           style={{
-            position: 'relative', bacgroundSize: "cover",
+            position: 'relative', backgroundSize: "cover",
             objectFit: "contain"
           }}
           className="react-player"
           width="100%"
           height="100%"
+          muted={muted}
+          volume={volume}
           playbackRate={playbackRate}
           onProgress={handleProgress}
         />
