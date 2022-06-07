@@ -151,36 +151,25 @@ const Controls = forwardRef(
             direction="row"
             alignItems="center"
             justify="space-between"
-            style
             style={{ padding: 16 }}
           >
-            <Grid item>
-              <Typography variant="h5" style={{ color: "#fff" }}>
-                Video Title
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Button
-                onClick={onBookmark}
-                variant="contained"
-                color="primary"
-                startIcon={<BookmarkIcon />}
-              >
-                Bookmark
-              </Button>
-            </Grid>
+            {/*<Grid item>*/}
+            {/*  <Typography variant="h5" style={{ color: "#fff" }}>*/}
+            {/*    Video Title*/}
+            {/*  </Typography>*/}
+            {/*</Grid>*/}
           </Grid>
           <Grid container direction="row" alignItems="center" justify="center">
-            <IconButton
-              onClick={onRewind}
-              className={classes.controlIcons}
-              aria-label="rewind"
-            >
-              <FastRewindIcon
-                className={classes.controlIcons}
-                fontSize="inherit"
-              />
-            </IconButton>
+            {/*<IconButton*/}
+            {/*  onClick={onRewind}*/}
+            {/*  className={classes.controlIcons}*/}
+            {/*  aria-label="rewind"*/}
+            {/*>*/}
+            {/*  <FastRewindIcon*/}
+            {/*    className={classes.controlIcons}*/}
+            {/*    fontSize="inherit"*/}
+            {/*  />*/}
+            {/*</IconButton>*/}
             <IconButton
               onClick={onPlayPause}
               className={classes.controlIcons}
@@ -192,13 +181,13 @@ const Controls = forwardRef(
                 <PlayArrowIcon fontSize="inherit" />
               )}
             </IconButton>
-            <IconButton
-              onClick={onFastForward}
-              className={classes.controlIcons}
-              aria-label="forward"
-            >
-              <FastForwardIcon fontSize="inherit" />
-            </IconButton>
+            {/*<IconButton*/}
+            {/*  onClick={onFastForward}*/}
+            {/*  className={classes.controlIcons}*/}
+            {/*  aria-label="forward"*/}
+            {/*>*/}
+            {/*  <FastForwardIcon fontSize="inherit" />*/}
+            {/*</IconButton>*/}
           </Grid>
           {/* bottom controls */}
           <Grid
