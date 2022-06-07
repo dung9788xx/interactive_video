@@ -86,6 +86,8 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [prePosition, setPrePosition] = useState(null);
+  const [currentSlidePosition, setCurrentSlidePosition] = useState(null);
+  const [currentSlideList, setCurrentSlideList] = useState([]);
   const [content, setContent] = useState([]);
   const [url, setUrl] = useState(null);
   const [isShow, setIsShow] = useState(false);
@@ -93,6 +95,9 @@ function App() {
   const [width, setWidth] = useState(1024)
   const TYPE_SEEK = 1;
   const TYPE_NEXT_VIDEO = 2;
+  const TYPE_SLIDE_VIDEO = 3;
+  const TYPE_NEXT_SLIDE = 4;
+  const TYPE_PREV_SLIDE = 5;
   const playerContainerRef = useRef(null);
   const controlsRef = useRef(null);
   const canvasRef = useRef(null);
@@ -186,7 +191,6 @@ function App() {
   };
 
   const handleMouseMove = () => {
-    console.log("mousemove");
     controlsRef.current.style.visibility = "visible";
     count = 0;
   };
@@ -226,6 +230,7 @@ function App() {
     },
     {
       id: 2,
+      type: TYPE_NEXT_VIDEO,
       url: "climbhill.mp4",
       text: "Climb Hill",
       banners: [6, 7],
@@ -250,6 +255,7 @@ function App() {
     },
     {
       id: 3,
+      type: TYPE_NEXT_VIDEO,
       text: "Swimming",
       style: {
         display: "flex",
@@ -273,6 +279,7 @@ function App() {
     },
     {
       id: 4,
+      type: TYPE_NEXT_VIDEO,
       text: "Go Racing",
       style: {
         display: "flex",
@@ -294,6 +301,7 @@ function App() {
     },
     {
       id: 5,
+      type: TYPE_NEXT_VIDEO,
       text: "Go Home",
       style: {
         display: "flex",
@@ -315,6 +323,7 @@ function App() {
     },
     {
       id: 6,
+      type: TYPE_NEXT_VIDEO,
       text: "Look Around",
       style: {
         display: "flex",
@@ -336,6 +345,12 @@ function App() {
     },
     {
       id: 7,
+      type: TYPE_SLIDE_VIDEO,
+      slides: [
+        {name: 'slide 1', time: 15},
+        {name: 'slide 2', time: 30},
+        {name: 'slide 2', time: 45},
+      ],
       text: "Look Sky",
       banners: [8, 9],
       time_show: 1,
@@ -359,9 +374,9 @@ function App() {
     },
     {
       id: 8,
-      type: TYPE_SEEK,
-      text: "Seek to 30",
-      seek_to: 30,
+      type: TYPE_NEXT_SLIDE,
+      text: "Next Slide",
+      seek_to: 16,
       style: {
         display: "flex",
         justifyContent: "center",
@@ -382,8 +397,8 @@ function App() {
     {
       id: 9,
       type: TYPE_SEEK,
-      text: "Seek to 15",
-      seek_to: 15,
+      text: "Back slide",
+      seek_to: 0,
       style: {
         display: "flex",
         justifyContent: "center",
@@ -422,19 +437,28 @@ function App() {
         }
       }
     }
+
+
+
     setState({...state, ...changState});
   }
   useEffect(() => {
-    console.log(prePosition);
-  }, [prePosition]);
-  useEffect(() => {
+    if(currentSlideList.length > 0) {
+      player.current.seekTo(currentSlideList[currentSlidePosition-1].time);
+    }
+  }, [currentSlidePosition]);
 
-    if (isShow) {
+
+  useEffect(()=>{
+    if(currentSlideList.length >0) {
       playData[currentPosition].banners.forEach((index) => {
         let item = playData[index - 1];
-        if (item.type === TYPE_SEEK) {
+        if (item.type === TYPE_NEXT_SLIDE) {
           setContent(content => [...content, (<div key={item.id} style={item.style} onClick={(e) => {
-            player.current.seekTo(item.seek_to);
+            // console.log(currentSlideList);
+            // console.log(currentSlidePosition);
+            // player.current.seekTo(currentSlideList[currentSlidePosition].time);
+            setCurrentSlidePosition(currentSlidePosition=>currentSlidePosition + 1);
           }}>{item.text}</div>)])
         } else {
           setContent(content => [...content, (<div key={item.id} style={item.style} onClick={(e) => {
@@ -446,6 +470,33 @@ function App() {
           }}>{item.text}</div>)])
         }
       });
+    }
+  }, [currentSlideList]);
+  useEffect(() => {
+    if (isShow) {
+      if (playData[currentPosition].type === TYPE_SLIDE_VIDEO) {
+
+        setCurrentSlideList(playData[currentPosition].slides);
+      } else {
+        console.log("render nomarl");
+        playData[currentPosition].banners.forEach((index) => {
+          let item = playData[index - 1];
+          if (item.type === TYPE_SEEK) {
+            setContent(content => [...content, (<div key={item.id} style={item.style} onClick={(e) => {
+              player.current.seekTo(item.seek_to);
+            }}>{item.text}</div>)])
+          } else {
+            setContent(content => [...content, (<div key={item.id} style={item.style} onClick={(e) => {
+              setUrl(item.url);
+              setIsShow(false);
+              setContent([]);
+              setPrePosition(item.pre_position - 1);
+              setCurrentPosition(item.id - 1);
+            }}>{item.text}</div>)])
+          }
+        });
+      }
+
     }
 
   }, [isShow]);
@@ -536,7 +587,7 @@ function App() {
                                        borderRadius: 10,
                                        left: 10,
                                        color: "white",
-                                       fontSize:"calc(1vw + 1vh)"
+                                       fontSize: "calc(1vw + 1vh)"
                                      }}>
           Home
         </div>}
@@ -561,7 +612,7 @@ function App() {
                                        borderRadius: 10,
                                        left: 10,
                                        color: "white",
-                                       fontSize:"calc(1vw + 1vh)"
+                                       fontSize: "calc(1vw + 1vh)"
                                      }}>
           Back to previous action
         </div>}
