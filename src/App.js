@@ -347,9 +347,11 @@ function App() {
       id: 7,
       type: TYPE_SLIDE_VIDEO,
       slides: [
-        {name: 'slide 1', time: 15},
-        {name: 'slide 2', time: 30},
-        {name: 'slide 2', time: 45},
+        {name: 'slide 0', time: 0},
+        {name: 'slide 1', time: 16},
+        {name: 'slide 2', time: 92},
+        {name: 'slide 3', time: 129},
+        {name: 'slide 4', time: 257},
       ],
       text: "Look Sky",
       banners: [8, 9],
@@ -369,7 +371,7 @@ function App() {
         opacity: 0.8,
         cursor: "pointer"
       },
-      url: "sky.mp4",
+      url: "aws.mp4",
       pre_position: 2,
     },
     {
@@ -396,7 +398,7 @@ function App() {
     },
     {
       id: 9,
-      type: TYPE_SEEK,
+      type: TYPE_PREV_SLIDE,
       text: "Back slide",
       seek_to: 0,
       style: {
@@ -455,10 +457,30 @@ function App() {
         let item = playData[index - 1];
         if (item.type === TYPE_NEXT_SLIDE) {
           setContent(content => [...content, (<div key={item.id} style={item.style} onClick={(e) => {
-            // console.log(currentSlideList);
-            // console.log(currentSlidePosition);
-            // player.current.seekTo(currentSlideList[currentSlidePosition].time);
-            setCurrentSlidePosition(currentSlidePosition=>currentSlidePosition + 1);
+            let currentTime = player.current.getCurrentTime();
+            let indexNext = currentSlideList.findIndex(item => item.time > currentTime);
+            if (indexNext === -1) {
+              indexNext = currentSlideList.length-1;
+            }
+            player.current.seekTo(currentSlideList[indexNext].time);
+            // setCurrentSlidePosition(indexNext);
+          }}>{item.text}</div>)])
+        } else if (item.type === TYPE_PREV_SLIDE){
+          setContent(content => [...content, (<div key={item.id} style={item.style} onClick={(e) => {
+            let currentTime = player.current.getCurrentTime();
+            let indexNext = currentSlideList.findIndex(item => item.time > currentTime);
+            if (indexNext === -1) {
+              indexNext = currentSlideList.length - 1;
+            }
+            if (currentTime - 2 > currentSlideList[indexNext - 1].time) {
+              player.current.seekTo(currentSlideList[indexNext - 1].time);
+            } else {
+              if (indexNext < 2) {
+                player.current.seekTo(0);
+              } else
+                player.current.seekTo(currentSlideList[indexNext - 2].time);
+            }
+
           }}>{item.text}</div>)])
         } else {
           setContent(content => [...content, (<div key={item.id} style={item.style} onClick={(e) => {
