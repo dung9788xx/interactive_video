@@ -565,7 +565,6 @@ function App() {
             objectFit: "contain"
           }}
           className="react-player"
-          progressInterval={100}
           width="100%"
           height="100%"
           playbackRate={playbackRate}
